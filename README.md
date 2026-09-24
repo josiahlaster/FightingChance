@@ -194,6 +194,37 @@ Express will serve `client/dist/` and fall back to `index.html` for SPA routes.
 - [ ] `POST /api/health` returns `{"ok":true}` after deploy
 - [ ] Submit a test referral and confirm delivery
 
+### GitHub Pages (current frontend hosting)
+
+The frontend is deployed to GitHub Pages as a **project site served from
+the `main` branch root**: https://josiahlaster.github.io/FightingChance/
+
+To redeploy after changes:
+
+```bash
+npm run build:pages     # builds client + copies dist to the repo root + writes .nojekyll
+git add -A && git commit -m "Rebuild Pages site" && git push
+```
+
+How it works:
+
+- `.nojekyll` disables Jekyll so the built files are served as pushed.
+- The production build uses base path `/FightingChance/` (override with
+  `REPO_NAME` if the repo is ever renamed).
+- Deep links like `/FightingChance/referral` are handled by the SPA
+  fallback: Pages serves `404.html`, which stashes the path and
+  redirects to `index.html` (see `client/public/404.html` + `main.jsx`).
+- The referral API is NOT hosted by Pages. When the Express backend is
+  deployed (Render/Railway/etc.), rebuild with `VITE_API_BASE` pointing
+  at it, e.g.:
+
+  ```bash
+  VITE_API_BASE=https://your-api.onrender.com npm run build:pages
+  ```
+
+  Until then the form shows the graceful "unable to submit" error with
+  the phone number, as designed.
+
 ---
 
 ## How Referral Emails Work
