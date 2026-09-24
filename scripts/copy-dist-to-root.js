@@ -12,7 +12,7 @@
  * Run via `npm run build:pages`.
  */
 
-import { cpSync, existsSync, rmSync } from 'node:fs';
+import { cpSync, existsSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -30,4 +30,9 @@ for (const entry of ['assets', 'index.html', '404.html', 'favicon.svg']) {
 }
 
 cpSync(dist, root, { recursive: true });
+
+// `.nojekyll` disables GitHub Pages' Jekyll processor so built assets
+// (underscore-free but hashed/JS-heavy) are served exactly as pushed.
+writeFileSync(join(root, '.nojekyll'), '');
+
 console.log('Copied client/dist -> repo root (GitHub Pages root deploy).');
