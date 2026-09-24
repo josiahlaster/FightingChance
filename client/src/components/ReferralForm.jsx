@@ -80,7 +80,11 @@ export default function ReferralForm() {
     setServerMessage('');
 
     try {
-      const res = await fetch('/api/referral', {
+      // Same-origin in dev (vite proxies /api); on GitHub Pages the
+      // Express API is hosted separately and injected at build time via
+      // VITE_API_BASE (e.g. https://fighting-chance-api.onrender.com).
+      const apiBase = import.meta.env.VITE_API_BASE || '';
+      const res = await fetch(`${apiBase}/api/referral`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

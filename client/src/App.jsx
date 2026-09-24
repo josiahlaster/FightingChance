@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+
+// On GitHub Pages project sites the app lives under /<repo>/; on a
+// custom domain or in dev it lives at the root.
+const BASENAME = import.meta.env.PROD
+  ? `/${import.meta.env.VITE_REPO_NAME || 'FightingChance'}`
+  : '/';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import SplashScreen from './components/SplashScreen';
@@ -24,7 +30,7 @@ export default function App() {
   const [splashDone, setSplashDone] = useState(false);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={BASENAME}>
       <SplashScreen onDone={() => setSplashDone(true)} />
       <div aria-hidden={!splashDone} style={splashDone ? undefined : { pointerEvents: 'none' }}>
         <Navbar />

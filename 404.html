@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fighting Chance Transitional Restoration</title>
+    <script>
+      // GitHub Pages SPA fallback: a deep link like /FightingChance/referral
+      // first lands on 404.html, where sessionStorage carries the path over
+      // to index.html so React Router can resolve it client-side.
+      sessionStorage.setItem(
+        'fc-redirect',
+        location.pathname + location.search + location.hash
+      );
+      location.replace('./');
+    </script>
+  </head>
+  <body>
+    <p>
+      Loading Fighting Chance Transitional Restoration…
+      <a href="./">Continue to the site</a>.
+    </p>
+  </body>
+</html>

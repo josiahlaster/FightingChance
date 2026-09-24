@@ -9,6 +9,7 @@
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
     "build": "npm run build --prefix client",
+    "build:pages": "npm run build && node scripts/copy-dist-to-root.js",
     "start": "npm run start --prefix server",
     "check": "npm run check --prefix client"
   },
