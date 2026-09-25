@@ -1375,14 +1375,28 @@ legend {
   justify-content: center;
   background: var(--fc-black);
   overflow: hidden;
+}.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
+/* The whole overlay fades away as its final act. */
 .splash--fade {
   animation: splash-fade 0.8s ease forwards;
 }
 
 @keyframes splash-fade {
-  to { opacity: 0; visibility: hidden; }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 .splash__stage {

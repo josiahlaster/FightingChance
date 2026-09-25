@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 // On GitHub Pages project sites the app lives under /<repo>/; on a
@@ -27,11 +27,14 @@ function ScrollToTop() {
 
 export default function App() {
   // Splash shows once per full page load (not per route change).
+  // The callback identity is stable (useCallback) so the splash's
+  // internal timers are never torn down and restarted by a re-render.
   const [splashDone, setSplashDone] = useState(false);
+  const handleSplashDone = useCallback(() => setSplashDone(true), []);
 
   return (
     <BrowserRouter basename={BASENAME}>
-      <SplashScreen onDone={() => setSplashDone(true)} />
+      <SplashScreen onDone={handleSplashDone} />
       <div aria-hidden={!splashDone} style={splashDone ? undefined : { pointerEvents: 'none' }}>
         <Navbar />
         <main id="main-content">

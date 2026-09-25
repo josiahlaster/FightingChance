@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import logo from '../assets/logo.png';
 
 /**
@@ -52,6 +52,16 @@ export default function SplashScreen({ onDone }) {
   const [phase, setPhase] = useState('pop'); // pop -> chain-out -> break -> fade -> gone
   const [reduced, setReduced] = useState(false);
 
+  // Hold the latest onDone in a ref. The parent passes a brand-new callback
+  // identity on every re-render; having onDone in this effect's dependency
+  // list re-ran the sequence AFTER the splash had finished — restarting the
+  // timers and replaying the whole splash a second time. With the ref, the
+  // sequence below runs exactly once per page load.
+  const onDoneRef = useRef(onDone);
+  useEffect(() => {
+    onDoneRef.current = onDone;
+  }, [onDone]);
+
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     setReduced(mq.matches);
@@ -60,7 +70,7 @@ export default function SplashScreen({ onDone }) {
       setPhase('fade');
       const t = setTimeout(() => {
         setPhase('gone');
-        onDone?.();
+        onDoneRef.current?.();
       }, 500);
       return () => clearTimeout(t);
     }
@@ -71,11 +81,11 @@ export default function SplashScreen({ onDone }) {
       setTimeout(() => setPhase('fade'), 3100),
       setTimeout(() => {
         setPhase('gone');
-        onDone?.();
+        onDoneRef.current?.();
       }, 3900),
     ];
     return () => timers.forEach(clearTimeout);
-  }, [onDone]);
+  }, []);
 
   if (phase === 'gone') return null;
 
